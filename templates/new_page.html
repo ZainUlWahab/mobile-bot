@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            word-wrap: break-word;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        #dashboard {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .product-details {
+            white-space: pre-line;
+        }
+
+        .product-info {
+            max-width: 700px; /* Adjust max-width as needed */
+            overflow: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="dashboard">Dashboard</div>
+
+    <table>
+        <tr>
+            <th>Total number of listings</th>
+            <td>196</td>
+        </tr>
+        <tr>
+            <th>Average product price</th>
+            <td>Rs. 47,326 </td>
+        </tr>
+        <tr>
+            <th>Average ratings of products</th>
+            <td>4.15</td>
+        </tr>
+        <tr>
+            <th>Average review count per product</th>
+            <td>42 Reviews</td>
+        </tr>
+        <tr>
+            <th>Top 5 products with highest rating</th>
+            <td class="product-info">
+                <button id="new-page-button" onclick="goToNewPage()">Go to DASHBOARD 2</button>
+            </td>
+        </tr>
+        <tr>
+            <th>Top 5 products with most reviews</th>
+            <td class="product-info">
+                <button id="new-page-button" onclick="goToNewPage2()">Go to DASHBOARD 3</button>
+            </td>
+        </tr>
+    </table>
+    <script>
+        function goToNewPage() {
+            window.location.href = '/new_page2'; // Replace '/dashboard' with the actual URL of your new page
+        }
+        function goToNewPage2() {
+            window.location.href = '/new_page3'; // Replace '/dashboard' with the actual URL of your new page
+        }
+    </script> 
+</body>
+</html>

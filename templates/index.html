@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #chat-container {
+            max-width: 400px;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+
+        #chat-history {
+            padding: 10px;
+            overflow-y: auto;
+            max-height: 300px;
+        }
+
+        #user-input {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+        }
+
+        #user-input-text {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        #send-button {
+            margin-left: 10px;
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .user-message {
+            text-align: right;
+            color: #fff;
+            background-color: #4CAF50;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .bot-message {
+            text-align: left;
+            background-color: #ddd;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            white-space: pre-line; /* Add this line to preserve line breaks */
+            word-wrap: break-word;
+        }
+        #new-page-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #question-count {
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <button id="new-page-button" onclick="goToNewPage()">Go to DASHBOARD</button>
+        <div id="chat-history"></div>
+        <div id="user-input">
+            <input type="text" id="user-input-text" placeholder="Type your message...">
+            <button id="send-button" onclick="sendMessage()">Send</button>
+        </div>
+        <div id="question-count">Total number of questions asked: <span id="question-counter">0</span></div>
+    </div>
+    <script>
+        let questionCounter = 0;
+        function sendMessage() {
+            var user_input = document.getElementById('user-input-text').value;
+            document.getElementById('user-input-text').value = '';
+            
+            // Display user's message
+            const userMessage = document.createElement('div');
+            userMessage.className = 'user-message';
+            userMessage.innerHTML = user_input;
+            document.getElementById('chat-history').appendChild(userMessage);
+            questionCounter++;
+            document.getElementById('question-counter').innerText = questionCounter;
+            // Send user input to Flask server
+            fetch('/get_response', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'user_input=' + encodeURIComponent(user_input)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display bot response character by character
+                const botMessage = document.createElement('div');
+                botMessage.className = 'bot-message';
+                document.getElementById('chat-history').appendChild(botMessage);
+    
+                const chars = data.bot_response.split('');
+                chars.forEach((char, index) => {
+                    setTimeout(() => {
+                        botMessage.innerHTML += char;
+                        if (index === chars.length - 1) {
+                            // Scroll to the bottom when the message is complete
+                            document.getElementById('chat-history').scrollTop = document.getElementById('chat-history').scrollHeight;
+                        }
+                    }, 10 * index); // Adjust the delay (10 milliseconds in this example)
+                });
+            });
+        }
+        function goToNewPage() {
+            window.location.href = '/new_page'; // Replace '/dashboard' with the actual URL of your new page
+        }
+    </script> 
+</body>
+</html>
